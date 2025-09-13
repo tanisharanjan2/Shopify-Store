@@ -45,7 +45,7 @@ export default function LoginPage() {
           color: '#e02020e3'
         }}
       >
-        Storefy
+        Shopify
       </h1>
 
       <h2>Login</h2>
