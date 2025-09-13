@@ -5,13 +5,21 @@ const db = require('./models');
 
 
 const app = express();
-app.use(cors());
+
+// --- MODIFIED: Added specific CORS options for deployment ---
+const corsOptions = {
+  origin: [
+    'http://localhost:3000', // For your local development
+    'https://your-frontend-name.onrender.com' // Placeholder for your live site
+  ]
+};
+app.use(cors(corsOptions));
+// --- END MODIFICATION ---
+
 app.use(express.json());
 
 const shopifyRoutes = require('./routes/shopify');
 app.use('/api/shopify', shopifyRoutes);
-
-
 
 // API Routes
 app.use('/api/auth', require('./routes/auth'));

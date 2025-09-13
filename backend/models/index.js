@@ -1,34 +1,50 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME || 'xeno_db',
-  process.env.DB_USER || 'root',
-  process.env.DB_PASSWORD || '',
-  {
-    host: process.env.DB_HOST || 'localhost',
+let sequelize;
+
+// --- MODIFIED: Added logic to handle both local and deployed databases ---
+if (process.env.DATABASE_URL) {
+  // This branch is for production (when deployed on Render)
+  // It uses the single connection URL provided by Railway
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: 'mysql',
-    logging: false
-  }
-);
+    protocol: 'mysql',
+    logging: false,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false // Required for some cloud database providers
+      }
+    }
+  });
+} else {
+  // This branch is for your local development
+  sequelize = new Sequelize(
+    process.env.DB_NAME || 'xeno_db',
+    process.env.DB_USER || 'root',
+    process.env.DB_PASSWORD || '',
+    {
+      host: process.env.DB_HOST || 'localhost',
+      dialect: 'mysql',
+      logging: false
+    }
+  );
+}
+// --- END MODIFICATION ---
 
 const db = {};
 
 // --- Model Definitions ---
 db.Event = require('./event')(sequelize);
-db.OrderItem = require('./orderItem')(sequelize); // keep order-item model
+db.OrderItem = require('./orderItem')(sequelize);
 
 db.Tenant = sequelize.define('Tenant', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, allowNull: false },
-
-  // ✅ Keep both store URL (merchant site) and store domain (Shopify)
   storeUrl: { type: DataTypes.STRING, allowNull: false, unique: true },
   storeDomain: { type: DataTypes.STRING, allowNull: false, unique: true },
-
-  // ✅ Shopify API token
   shopifyAccessToken: { type: DataTypes.STRING, allowNull: true },
-
   adminEmail: { type: DataTypes.STRING, allowNull: false, unique: true, validate: { isEmail: true } },
   adminPasswordHash: { type: DataTypes.STRING, allowNull: false },
   logoUrl: { type: DataTypes.STRING, allowNull: true }
