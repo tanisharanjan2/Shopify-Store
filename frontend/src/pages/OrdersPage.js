@@ -11,7 +11,6 @@ export default function OrdersPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Refetch orders whenever the global data source changes
     fetchOrders();
   }, [dataSource]);
 
@@ -27,12 +26,11 @@ export default function OrdersPage() {
       if (to) params.append('to', to);
 
       if (dataSource === 'shopify') {
-        // --- FIXED: First sync the data, THEN fetch it from our database ---
-        // Step 1: Tell the backend to sync the latest orders from Shopify.
+        
         await API.get('/shopify/sync/orders', { headers });
       }
 
-      // Step 2: Now, fetch the clean, formatted orders from our own database for BOTH sources.
+      
       const res = await API.get(`/dashboard/orders?${params.toString()}`, { headers });
       ordersData = res.data.orders || [];
 

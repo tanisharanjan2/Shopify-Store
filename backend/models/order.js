@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
       type: DataTypes.DATE, 
       allowNull: false 
     },
-    tenantId: { // ✅ added
+    tenantId: { 
       type: DataTypes.INTEGER,
       allowNull: false,
       references: { model: 'Tenants', key: 'id' }
@@ -35,7 +35,7 @@ module.exports = (sequelize) => {
     ]
   });
 
-  // ✅ Associate Order with Tenant
+  
   Order.associate = (models) => {
     Order.belongsTo(models.Tenant, { foreignKey: 'tenantId' });
   };

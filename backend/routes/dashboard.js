@@ -9,7 +9,7 @@ const authMiddleware = require('../middleware/auth');
 // --- Dashboard Overview ---
 router.get('/overview', authMiddleware, async (req, res) => {
   try {
-    const tenantId = req.tenantId; // Ensure tenantId is taken from auth middleware
+    const tenantId = req.tenantId; 
     if (!tenantId) return res.status(400).json({ msg: 'Tenant ID missing' });
 
     const totalCustomers = await Customer.count({ where: { tenantId } });
@@ -46,7 +46,6 @@ router.get('/orders', authMiddleware, async (req, res) => {
       limit: 50,
       include: [
         { model: Product, attributes: ['title'], through: { attributes: [] } },
-        // --- ADDED: This joins the Customer data to each order ---
         { model: Customer, attributes: ['firstName', 'lastName'] }
       ]
     });

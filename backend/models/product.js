@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
       type: DataTypes.DECIMAL(12, 2), 
       allowNull: false 
     },
-    tenantId: { // ✅ added this
+    tenantId: { 
       type: DataTypes.INTEGER,
       allowNull: false,
       references: { model: 'Tenants', key: 'id' }
@@ -34,7 +34,7 @@ module.exports = (sequelize) => {
     ]
   });
 
-  // ✅ Associate Product with Tenant
+  
   Product.associate = (models) => {
     Product.belongsTo(models.Tenant, { foreignKey: 'tenantId' });
   };

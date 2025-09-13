@@ -6,22 +6,22 @@ const db = require('./models');
 
 const app = express();
 
-// --- MODIFIED: Added specific CORS options for deployment ---
+
 const corsOptions = {
   origin: [
-    'http://localhost:3000', // For your local development
-    'https://your-frontend-name.onrender.com' // Placeholder for your live site
+    'http://localhost:3000', 
+    'https://shopify-store-frontend.onrender.com' 
   ]
 };
 app.use(cors(corsOptions));
-// --- END MODIFICATION ---
+
 
 app.use(express.json());
 
 const shopifyRoutes = require('./routes/shopify');
 app.use('/api/shopify', shopifyRoutes);
 
-// API Routes
+
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/ingest', require('./routes/ingest'));
 app.use('/api/dashboard', require('./routes/dashboard'));
@@ -30,7 +30,7 @@ const PORT = process.env.PORT || 4000;
 
 async function start() {
   try {
-    await db.sequelize.sync({ alter: true });
+    await db.sequelize.sync(); 
     console.log('DB connected & models synced');
     app.listen(PORT, () => console.log(`Server running on ${PORT}`));
   } catch (err) {

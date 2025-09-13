@@ -98,7 +98,7 @@ export default function DashboardLayout() {
       setLoadingMessage('Loading sample data...');
       setError('');
 
-      // --- DATA FIX: Added a working set of sample data ---
+      
       const sampleProducts = [
 { shopifyId: 101, title: "Classic T-Shirt", price: "25.00" },
         { shopifyId: 102, title: "Denim Jeans", price: "75.00" },
@@ -174,7 +174,7 @@ export default function DashboardLayout() {
 
       await fetchData();
 
-    } catch (err) { // --- SYNTAX FIX: Added missing { ---
+    } catch (err) { 
       setError('Failed to unload data.');
       console.error(err);
       setLoadingMessage('');

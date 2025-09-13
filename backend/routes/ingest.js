@@ -1,18 +1,17 @@
 const express = require('express');
 const router = express.Router();
-// --- ADDED: Import OrderItem and authMiddleware ---
+
 const { Customer, Product, Order, Event, OrderItem, sequelize } = require('../models');
 const authMiddleware = require('../middleware/auth');
 
-// --- FIXED: Added authMiddleware and use tenantId from token ---
+
 router.post('/products', authMiddleware, async (req, res) => {
-  const { tenantId } = req; // Use secure tenantId from token
+  const { tenantId } = req; 
   const items = Array.isArray(req.body) ? req.body : [req.body];
 
   try {
     for (const item of items) {
       await Product.findOrCreate({
-        // --- FIXED: Expect 'item.shopifyId' from the frontend ---
         where: { shopifyId: item.shopifyId, tenantId },
         defaults: {
           title: item.title,
@@ -27,18 +26,18 @@ router.post('/products', authMiddleware, async (req, res) => {
   }
 });
 
-// --- FIXED: Added authMiddleware and use tenantId from token ---
+
 router.post('/customers', authMiddleware, async (req, res) => {
-  const { tenantId } = req; // Use secure tenantId from token
+  const { tenantId } = req; 
   const items = Array.isArray(req.body) ? req.body : [req.body];
 
   try {
     for (const item of items) {
       await Customer.findOrCreate({
-        // --- FIXED: Expect 'item.shopifyId' from the frontend ---
+        
         where: { shopifyId: item.shopifyId, tenantId },
         defaults: {
-          // --- FIXED: Expect camelCase properties from frontend ---
+          
           email: item.email,
           firstName: item.firstName,
           lastName: item.lastName,
@@ -52,12 +51,12 @@ router.post('/customers', authMiddleware, async (req, res) => {
   }
 });
 
-// --- ADDED: Route to clear all data for a tenant ---
+
 router.delete('/tenant/all-data', authMiddleware, async (req, res) => {
   const { tenantId } = req;
   const transaction = await sequelize.transaction();
   try {
-    // Delete in an order that respects foreign key constraints
+    
     await Order.destroy({ where: { tenantId }, transaction });
     await Event.destroy({ where: { tenantId }, transaction });
     await Customer.destroy({ where: { tenantId }, transaction });
@@ -72,9 +71,9 @@ router.delete('/tenant/all-data', authMiddleware, async (req, res) => {
   }
 });
 
-// --- FIXED: Added authMiddleware and use tenantId from token ---
+
 router.post('/orders', authMiddleware, async (req, res) => {
-  const { tenantId } = req; // Use secure tenantId from token
+  const { tenantId } = req; 
   const items = Array.isArray(req.body) ? req.body : [req.body];
 
   const transaction = await sequelize.transaction();
@@ -88,11 +87,10 @@ router.post('/orders', authMiddleware, async (req, res) => {
       });
 
       const [order, created] = await Order.findOrCreate({
-        // --- FIXED: Expect 'o.shopifyId' from the frontend ---
+        
         where: { shopifyId: o.shopifyId, tenantId },
         defaults: {
           customerId: customer.id,
-          // --- FIXED: Expect camelCase properties from frontend ---
           totalPrice: o.totalPrice,
           createdAtShopify: o.createdAtShopify,
         },
@@ -127,7 +125,7 @@ router.post('/orders', authMiddleware, async (req, res) => {
   }
 });
 
-// --- FIXED: Added authMiddleware ---
+
 router.post('/events', authMiddleware, (req, res) => {
   res.status(200).send();
 });

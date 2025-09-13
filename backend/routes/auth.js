@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { Tenant } = require('../models');
 
-// POST /api/auth/signup
+
 router.post('/signup', async (req, res) => {
   const { name, storeUrl, storeDomain, accessToken, email, password } = req.body;
 
@@ -13,16 +13,16 @@ router.post('/signup', async (req, res) => {
   }
 
   try {
-    // Auto-generate logo URL from the store's website
+    
     const generatedLogoUrl = `https://www.google.com/s2/favicons?domain=${storeUrl}&sz=128`;
 
     const tenant = await Tenant.create({
       name,
       storeUrl,
-      storeDomain: storeDomain || null,          // Save storeDomain if provided
-      shopifyAccessToken: accessToken || null,  // Save accessToken if provided
+      storeDomain: storeDomain || null,          
+      shopifyAccessToken: accessToken || null,  
       adminEmail: email,
-      adminPasswordHash: password, // This will be hashed via model hook
+      adminPasswordHash: password, 
       logoUrl: generatedLogoUrl
     });
 
@@ -43,7 +43,7 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// POST /api/auth/login
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 

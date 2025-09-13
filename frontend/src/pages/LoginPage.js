@@ -17,14 +17,14 @@ export default function LoginPage() {
       const response = await API.post('/auth/login', { email, password });
 
       if (response.data.token) {
-        // ✅ Store JWT token
+        
         localStorage.setItem('token', response.data.token);
 
-        // ✅ Decode tenantId from JWT and store
+        
         const decoded = jwtDecode(response.data.token);
         localStorage.setItem('tenantId', decoded.tenantId);
 
-        // ✅ Optionally store tenant info from login response
+        
         localStorage.setItem('tenantName', response.data.tenant.name);
         localStorage.setItem('storeDomain', response.data.tenant.storeDomain);
 

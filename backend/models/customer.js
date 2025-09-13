@@ -39,7 +39,7 @@ module.exports = (sequelize) => {
     ]
   });
 
-  // ✅ Associate Customer with Tenant
+  
   Customer.associate = (models) => {
     Customer.belongsTo(models.Tenant, { foreignKey: 'tenantId' });
   };

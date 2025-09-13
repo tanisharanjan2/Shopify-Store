@@ -18,12 +18,10 @@ export default function SalesTrendPage() {
         const headers = { 'Authorization': `Bearer ${token}` };
 
         if (dataSource === 'shopify') {
-          // Step 1: Ensure data is up-to-date by telling the backend to sync.
           await API.get('/shopify/sync/orders', { headers });
         }
 
-        // Step 2: Fetch the final, pre-calculated trend data from our backend.
-        // This one endpoint works for BOTH sample and Shopify data.
+        
         const res = await API.get('/dashboard/sales-trend', { headers });
         setSalesTrend(res.data || []);
 
@@ -37,7 +35,7 @@ export default function SalesTrendPage() {
     };
 
     fetchData();
-  }, [dataSource]); // Re-run when the data source changes
+  }, [dataSource]); 
 
   if (loading) return <h3>Loading Sales Trend...</h3>;
   if (error) return <div style={{ color: 'red' }}>{error}</div>;

@@ -2,7 +2,6 @@ import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export default function TopCustomersBarChart({ data }) {
-  // Normalize data to chart format
   const chartData = data.map(customer => ({
     name: customer.name || 'Unknown',
     'Total Spent': parseFloat(customer.spend ?? customer.totalSpent ?? 0),

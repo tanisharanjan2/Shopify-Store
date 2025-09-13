@@ -5,7 +5,7 @@ import backgroundImage from './img2.png.jpg';
 export default function DashboardPage() {
   const { overview } = useOutletContext();
 
-  // Create a safe version of overview to prevent errors before data loads
+  
   const safeOverview = overview || { totalCustomers: 0, totalOrders: 0, revenue: 0 };
 
   return (
@@ -20,7 +20,7 @@ export default function DashboardPage() {
   );
 }
 
-// Card component
+
 function InteractiveCard({ title, value }) {
   return (
     <div style={interactiveCardStyle}>
@@ -30,7 +30,7 @@ function InteractiveCard({ title, value }) {
   );
 }
 
-// --- Styles ---
+
 const pageStyle = {
   padding: '40px',
   minHeight: '100vh',

@@ -9,8 +9,7 @@ function startScheduler() {
       
       if (tenants.length > 0) {
         console.log(`[Scheduler] Checking for updates for ${tenants.length} tenant(s) at ${new Date().toISOString()}`);
-        // In a real application, you would loop through tenants and
-        // make Shopify API calls here to sync data.
+
       }
       
     } catch (error) {

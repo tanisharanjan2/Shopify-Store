@@ -5,8 +5,8 @@ import API from '../api';
 export default function SignupPage() {
   const [name, setName] = useState('');
   const [storeUrl, setStoreUrl] = useState('');
-  const [storeDomain, setStoreDomain] = useState(''); // ✅ new
-  const [accessToken, setAccessToken] = useState(''); // ✅ new
+  const [storeDomain, setStoreDomain] = useState(''); 
+  const [accessToken, setAccessToken] = useState(''); 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');

@@ -72,27 +72,26 @@ async function ingestOrders(tenantId, items) {
   }
 }
 
-// --- 2. ADDED: New function to save Shopify customer events ---
+
 async function ingestEvents(tenantId, shopifyEvents) {
   for (const event of shopifyEvents) {
-    // Only process events that are linked to a customer
+    
     if (event.subject_type !== 'Customer') continue;
 
-    // Find the customer in our database that this event belongs to
+    
     const customer = await Customer.findOne({ where: { shopifyId: event.subject_id, tenantId } });
 
     if (customer) {
-      // Create the event record if it doesn't already exist
-      // This prevents creating duplicate events if you sync multiple times
+      
       await Event.findOrCreate({
         where: {
           tenantId,
           customerId: customer.id,
-          eventName: event.verb, // e.g., 'created', 'updated_payment_method'
-          createdAt: event.created_at // Use the original timestamp from Shopify
+          eventName: event.verb, 
+          createdAt: event.created_at 
         },
         defaults: {
-          // Store extra info from Shopify in the details column
+          
           details: {
             message: event.message,
             author: event.author,
@@ -108,6 +107,5 @@ module.exports = {
   ingestProducts,
   ingestCustomers,
   ingestOrders,
-  // --- 3. ADDED: Export the new function ---
   ingestEvents,
 };

@@ -3,10 +3,9 @@ const bcrypt = require('bcryptjs');
 
 let sequelize;
 
-// --- MODIFIED: Added logic to handle both local and deployed databases ---
+
 if (process.env.DATABASE_URL) {
-  // This branch is for production (when deployed on Render)
-  // It uses the single connection URL provided by Railway
+  
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: 'mysql',
     protocol: 'mysql',
@@ -14,12 +13,12 @@ if (process.env.DATABASE_URL) {
     dialectOptions: {
       ssl: {
         require: true,
-        rejectUnauthorized: false // Required for some cloud database providers
+        rejectUnauthorized: false 
       }
     }
   });
 } else {
-  // This branch is for your local development
+  
   sequelize = new Sequelize(
     process.env.DB_NAME || 'xeno_db',
     process.env.DB_USER || 'root',
@@ -31,11 +30,11 @@ if (process.env.DATABASE_URL) {
     }
   );
 }
-// --- END MODIFICATION ---
+
 
 const db = {};
 
-// --- Model Definitions ---
+
 db.Event = require('./event')(sequelize);
 db.OrderItem = require('./orderItem')(sequelize);
 
@@ -79,7 +78,7 @@ db.Order = sequelize.define('Order', {
   indexes: [{ unique: true, fields: ['tenantId', 'shopifyId'] }]
 });
 
-// --- Hooks ---
+
 db.Tenant.beforeCreate(async (tenant) => {
   if (tenant.adminPasswordHash) {
     const salt = await bcrypt.genSalt(10);
@@ -87,7 +86,7 @@ db.Tenant.beforeCreate(async (tenant) => {
   }
 });
 
-// --- Associations ---
+
 db.Tenant.hasMany(db.Customer, { foreignKey: 'tenantId' });
 db.Customer.belongsTo(db.Tenant, { foreignKey: 'tenantId' });
 

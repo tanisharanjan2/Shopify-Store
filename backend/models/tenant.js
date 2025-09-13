@@ -2,14 +2,12 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { Tenant, sequelize } = require('../models'); // make sure sequelize instance is exported
+const { Tenant, sequelize } = require('../models'); 
 
-// --- Ensure tables exist ---
-sequelize.sync({ alter: true })
-  .then(() => console.log('All tables synced!'))
-  .catch(err => console.error('Error syncing tables:', err));
 
-// POST /api/auth/signup
+
+
+
 router.post('/signup', async (req, res) => {
   const { name, storeDomain, shopifyAccessToken, email, password, logoUrl } = req.body;
 
@@ -18,7 +16,7 @@ router.post('/signup', async (req, res) => {
   }
 
   try {
-    // Hash the password before storing
+    
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const tenant = await Tenant.create({
@@ -47,7 +45,7 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// POST /api/auth/login
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
