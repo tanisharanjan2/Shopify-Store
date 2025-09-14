@@ -25,24 +25,24 @@ The application follows a modern three-tier architecture, with separate, decoupl
 <h3>Architecture Diagram</h3>
 
 ```mermaid
-graph TD
+graph LR
+  subgraph "User's Browser"
+    A["React frontend (Render)"]
+  end
 
-subgraph "User's Browser"
-    A["React Frontend on Render"]
-end
+  subgraph "Backend Infrastructure"
+    B["Node.js / Express (Render)"]
+    C["MySQL database (Railway)"]
+  end
 
-subgraph "Backend Infrastructure"
-    B["Node.js/Express Backend on Render"] -->|Reads/Writes Data (SQL)| C[(MySQL_DB)]
-end
-
-C["MySQL Database on Railway"]
-
-subgraph "External Services"
+  subgraph "External Services"
     D["Shopify Admin API"]
-end
+  end
 
-A -->|Makes API Calls (HTTPS/REST)| B
-B -->|Fetches Live Data| D
+  A -->|HTTPS / REST| B
+  B -->|Reads/Writes (SQL)| C
+  B -->|Fetches live data| D
+
 
 
 
