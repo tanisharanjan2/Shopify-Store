@@ -24,21 +24,23 @@ The application follows a modern three-tier architecture, with separate, decoupl
 
 <h3>Architecture Diagram</h3>
 
+```mermaid
 graph TD
-    subgraph "User's Browser"
-        A[React Frontend on Render]
-    end
 
-    subgraph "Backend Infrastructure"
-        B(Node.js/Express Backend on Render) -- "Reads/Writes Data (SQL)" --> C(MySQL Database on Railway);
-    end
+subgraph "User's Browser"
+    A[React Frontend on Render]
+end
 
-    subgraph "External Services"
-        D[Shopify Admin API]
-    end
+subgraph "Backend Infrastructure"
+    B[Node.js/Express Backend on Render] -->|Reads/Writes Data (SQL)| C[(MySQL Database on Railway)]
+end
 
-    A -- "Makes API Calls (HTTPS/REST)" --> B;
-    B -- "Fetches Live Data" --> D;
+subgraph "External Services"
+    D[Shopify Admin API]
+end
+
+A -->|Makes API Calls (HTTPS/REST)| B
+B -->|Fetches Live Data| D
 
 <ul>
 <li><b>Frontend (React):</b> A single-page application deployed as a Static Site on Render. It handles all user interaction and visualization.</li>
@@ -91,6 +93,52 @@ The backend server will start on <code>http://localhost:4000</code>.
 npm start</code></pre>
 The frontend will open in your browser at <code>http://localhost:3000</code>. You can now sign up, log in, and use the application.
 </li>
+</ol>
+
+<br>
+
+<h2>☁️ Deployment</h2>
+This project is deployed using Render for the frontend/backend and Railway for the database.
+
+<h3>1. Deploy the Database on Railway</h3>
+<ol>
+<li>Create a new project on Railway and provision a <b>MySQL</b> database.</li>
+<li>Go to the "Connect" tab and copy the <b>Database URL</b>.</li>
+</ol>
+
+<h3>2. Deploy the Backend on Render</h3>
+<ol>
+<li>Create a new <b>Web Service</b> on Render and connect your GitHub repository.</li>
+<li>Set the <b>Root Directory</b> to <code>backend</code>.</li>
+<li>Set the <b>Start Command</b> to <code>node index.js</code>.</li>
+<li>Add the following <b>Environment Variables</b>:
+<ul>
+<li><code>DATABASE_URL</code>: The URL you copied from Railway.</li>
+<li><code>JWT_SECRET</code>: A new, strong, random secret for production.</li>
+<li>Your Shopify credentials (<code>SHOPIFY_STORE_DOMAIN</code>, <code>SHOPIFY_ACCESS_TOKEN</code>).</li>
+</ul>
+</li>
+<li>Once deployed, copy the backend's public URL.</li>
+</ol>
+
+<h3>3. Deploy the Frontend on Render</h3>
+<ol>
+<li>Create a new <b>Static Site</b> on Render and connect the same repository.</li>
+<li>Set the <b>Root Directory</b> to <code>frontend</code>.</li>
+<li>Set the <b>Build Command</b> to <code>npm run build</code>.</li>
+<li>Set the <b>Publish Directory</b> to <code>build</code>.</li>
+<li>Add the <b>Environment Variable</b>:
+<ul>
+<li><code>REACT_APP_API_URL</code>: Your backend's URL (e.g., <code>https://www.google.com/search?q=https://your-backend.onrender.com/api</code>).</li>
+</ul>
+</li>
+</ol>
+
+<h3>4. Final CORS Update</h3>
+<ol>
+<li>Take your live frontend URL from Render.</li>
+<li>Add it to the <code>corsOptions</code> in your <code>backend/index.js</code> file.</li>
+<li>Commit and push this final change. Render will automatically redeploy the backend.</li>
 </ol>
 
 <br>
