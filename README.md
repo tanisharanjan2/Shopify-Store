@@ -169,7 +169,70 @@ The database uses a multi-tenant model where data is isolated by a <code>tenantI
 </ul>
 
 <br>
+```mermaid
+erDiagram
+    Tenant {
+        int id PK
+        string name
+        string storeUrl
+        string storeDomain
+        string adminEmail
+        string adminPasswordHash
+        string logoUrl
+        text shopifyAccessToken
+    }
 
+    Customer {
+        int id PK
+        int tenantId FK
+        bigint shopifyId
+        string email
+        string firstName
+        string lastName
+        decimal totalSpent
+    }
+
+    Product {
+        int id PK
+        int tenantId FK
+        bigint shopifyId
+        string title
+        decimal price
+    }
+
+    Order {
+        int id PK
+        int tenantId FK
+        int customerId FK
+        bigint shopifyId
+        decimal totalPrice
+        datetime createdAtShopify
+    }
+
+    OrderItem {
+        int orderId FK
+        int productId FK
+        int quantity
+        decimal price
+    }
+
+    Event {
+        int id PK
+        int tenantId FK
+        int customerId FK
+        string eventName
+        json eventData
+    }
+
+    Tenant ||--|{ Customer : has
+    Tenant ||--|{ Product : has
+    Tenant ||--|{ Order : has
+    Tenant ||--|{ Event : has
+    Customer ||--|{ Order : places
+    Customer ||--|{ Event : triggers
+    Order ||--o{ OrderItem : contains
+    Product ||--o{ OrderItem : "part of"
+<br>
 <h2>⚖️ Known Limitations & Assumptions</h2>
 
 <ul>
