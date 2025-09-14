@@ -169,7 +169,7 @@ The database uses a multi-tenant model where data is isolated by a <code>tenantI
 </ul>
 <br>
 
-```mermaid
+erDiagram
     Tenant {
         int id PK
         string name
