@@ -32,8 +32,10 @@ subgraph "User's Browser"
 end
 
 subgraph "Backend Infrastructure"
-    B["Node.js/Express Backend on Render"] -->|Reads/Writes Data (SQL)| C[(MySQL Database on Railway)]
+    B["Node.js/Express Backend on Render"] -->|Reads/Writes Data (SQL)| C[(MySQL_DB)]
 end
+
+C["MySQL Database on Railway"]
 
 subgraph "External Services"
     D["Shopify Admin API"]
@@ -41,6 +43,7 @@ end
 
 A -->|Makes API Calls (HTTPS/REST)| B
 B -->|Fetches Live Data| D
+
 
 
 
