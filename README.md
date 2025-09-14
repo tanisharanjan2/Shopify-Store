@@ -32,7 +32,7 @@ subgraph "User's Browser"
 end
 
 subgraph "Backend Infrastructure"
-    B["Node.js/Express Backend on Render"] -->|Reads/Writes Data (SQL)| C[("MySQL Database on Railway")]
+    B["Node.js/Express Backend on Render"] -->|Reads/Writes Data (SQL)| C[(MySQL<br>Database<br>on<br>Railway)]
 end
 
 subgraph "External Services"
