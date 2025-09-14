@@ -158,12 +158,57 @@ All routes are prefixed with <code>/api</code>. Routes marked with <code>(Protec
 The database uses a multi-tenant model where data is isolated by a <code>tenantId</code>.
 
 <ul>
-<li><b>Tenant:</b> Stores information about each registered store, including their name, URL, and credentials.</li>
-<li><b>Customer:</b> Stores customer information. A composite unique key on <code>(tenantId, shopifyId)</code> ensures customer IDs are unique per store.</li>
-<li><b>Product:</b> Stores product information, with a composite unique key on <code>(tenantId, shopifyId)</code>.</li>
-<li><b>Order:</b> Stores order information, with a composite unique key on <code>(tenantId, shopifyId)</code>.</li>
-<li><b>OrderItem:</b> A join table that links products to orders in a many-to-many relationship.</li>
+  <li><strong>Tenant:</strong> The central table for the multi-tenant system. Each row represents a single store.
+    <ul>
+      <li>id (Primary Key)</li>
+      <li>name, storeUrl, storeDomain, adminEmail, logoUrl (String)</li>
+      <li>shopifyAccessToken (String, should be encrypted in production)</li>
+      <li>adminPasswordHash (String)</li>
+    </ul>
+  </li>
+
+  <li><strong>Customer:</strong> Stores customer data, linked to a specific tenant.
+    <ul>
+      <li>id (Primary Key)</li>
+      <li>shopifyId (BigInt)</li>
+      <li>email, firstName, lastName (String)</li>
+      <li>totalSpent (Decimal)</li>
+      <li>tenantId (Foreign Key to Tenant)</li>
+      <li>Composite Unique Key on (tenantId, shopifyId)</li>
+    </ul>
+  </li>
+
+  <li><strong>Product:</strong> Stores product data, linked to a specific tenant.
+    <ul>
+      <li>id (Primary Key)</li>
+      <li>shopifyId (BigInt)</li>
+      <li>title, price (String, Decimal)</li>
+      <li>tenantId (Foreign Key to Tenant)</li>
+      <li>Composite Unique Key on (tenantId, shopifyId)</li>
+    </ul>
+  </li>
+
+  <li><strong>Order:</strong> Stores order data, linked to a tenant and a customer.
+    <ul>
+      <li>id (Primary Key)</li>
+      <li>shopifyId (BigInt)</li>
+      <li>totalPrice (Decimal)</li>
+      <li>createdAtShopify (DateTime)</li>
+      <li>tenantId (Foreign Key to Tenant)</li>
+      <li>customerId (Foreign Key to Customer)</li>
+      <li>Composite Unique Key on (tenantId, shopifyId)</li>
+    </ul>
+  </li>
+
+  <li><strong>OrderItem (Join Table):</strong> Creates the many-to-many relationship between Orders and Products.
+    <ul>
+      <li>orderId (Foreign Key to Order)</li>
+      <li>productId (Foreign Key to Product)</li>
+      <li>quantity, price (Integer, Decimal)</li>
+    </ul>
+  </li>
 </ul>
+
 <br>
 
 
