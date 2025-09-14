@@ -17,18 +17,24 @@ export default function LoginPage() {
       const response = await API.post('/auth/login', { email, password });
 
       if (response.data.token) {
-        
         localStorage.setItem('token', response.data.token);
 
-        
-        const decoded = jwtDecode(response.data.token);
-        localStorage.setItem('tenantId', decoded.tenantId);
+        try {
+          const decoded = jwtDecode(response.data.token);
+          localStorage.setItem('tenantId', decoded.tenantId || '');
+        } catch (decodeError) {
+          console.warn('Token could not be decoded', decodeError);
+        }
+
+        if (response.data.tenant) {
+          localStorage.setItem('tenantName', response.data.tenant.name || '');
+          localStorage.setItem('storeDomain', response.data.tenant.storeDomain || '');
+        }
 
         
-        localStorage.setItem('tenantName', response.data.tenant.name);
-        localStorage.setItem('storeDomain', response.data.tenant.storeDomain);
-
         navigate('/dashboard');
+      } else {
+        setError('No token received. Please try again.');
       }
     } catch (err) {
       setError(err.response?.data?.msg || 'Login failed. Please try again.');
