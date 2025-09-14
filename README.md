@@ -232,6 +232,7 @@ erDiagram
     Order ||--o{ OrderItem : contains
     Product ||--o{ OrderItem : "part of"
 
+
 <br>
 <h2>⚖️ Known Limitations & Assumptions</h2>
 
