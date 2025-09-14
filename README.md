@@ -148,10 +148,8 @@ All routes are prefixed with <code>/api</code>. Routes marked with <code>(Protec
 | `GET`    | `/shopify/sync/products` **(Protected)**   | Sync products from a live Shopify store.          |
 | `GET`    | `/shopify/sync/customers` **(Protected)**  | Sync customers from Shopify.                      |
 | `GET`    | `/shopify/sync/orders` **(Protected)**     | Sync orders from Shopify.                         |
-| `GET`    | `/shopify/sync/customer-events` **(Protected)** | Sync customer events from Shopify.                |
 | `GET`    | `/dashboard/overview` **(Protected)**      | Get high-level metrics for the dashboard.         |
 | `GET`    | `/dashboard/tenant-info` **(Protected)**   | Get the current tenant's name, email, and logo.   |
-| `GET`    | `/dashboard/events-summary` **(Protected)**| Get a summary of custom event counts.             |
 | `GET`    | `/dashboard/sales-trend` **(Protected)**   | Get data for the sales trend chart.               |
 | `GET`    | `/dashboard/top-customers-chart` **(Protected)** | Get data for the top customers chart.             |
 | `GET`    | `/dashboard/customer-history` **(Protected)** | Get a detailed history for all customers.         |
@@ -165,7 +163,6 @@ The database uses a multi-tenant model where data is isolated by a <code>tenantI
 <li><b>Product:</b> Stores product information, with a composite unique key on <code>(tenantId, shopifyId)</code>.</li>
 <li><b>Order:</b> Stores order information, with a composite unique key on <code>(tenantId, shopifyId)</code>.</li>
 <li><b>OrderItem:</b> A join table that links products to orders in a many-to-many relationship.</li>
-<li><b>Event:</b> Stores custom events (e.g., "Checkout Started") and events synced from Shopify.</li>
 </ul>
 <br>
 
