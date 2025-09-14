@@ -178,41 +178,41 @@ erDiagram
         string adminEmail
         string adminPasswordHash
         string logoUrl
-        text shopifyAccessToken
+        string shopifyAccessToken
     }
 
     Customer {
         int id PK
         int tenantId FK
-        bigint shopifyId
+        string shopifyId
         string email
         string firstName
         string lastName
-        decimal totalSpent
+        float totalSpent
     }
 
     Product {
         int id PK
         int tenantId FK
-        bigint shopifyId
+        string shopifyId
         string title
-        decimal price
+        float price
     }
 
     Order {
         int id PK
         int tenantId FK
         int customerId FK
-        bigint shopifyId
-        decimal totalPrice
-        datetime createdAtShopify
+        string shopifyId
+        float totalPrice
+        date createdAtShopify
     }
 
     OrderItem {
         int orderId FK
         int productId FK
         int quantity
-        decimal price
+        float price
     }
 
     Event {
@@ -220,7 +220,7 @@ erDiagram
         int tenantId FK
         int customerId FK
         string eventName
-        json eventData
+        string eventData
     }
 
     Tenant ||--|{ Customer : has
