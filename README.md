@@ -1,0 +1,139 @@
+<h1>Xeno: Multi-Tenant Shopify Data Ingestion & Insights Service</h1>
+
+This project is a full-stack, multi-tenant data ingestion and insights service built for Shopify stores. It simulates how a platform like Xeno can onboard different e-commerce businesses, sync their live data, and provide a dashboard to visualize key business metrics.
+
+This repository contains the complete source code for the backend API, the React frontend, and all related documentation.
+
+<br>
+
+<h2>🚀 Key Features</h2>
+
+<ul>
+<li><b>Multi-Tenancy:</b> Securely supports multiple stores, each with its own private data, credentials, and dashboard.</li>
+<li><b>Live Shopify Sync:</b> Connects to the Shopify Admin API to fetch and ingest live products, customers, orders, and customer events.</li>
+<li><b>Sample Data Mode:</b> Includes "Load Sample Data" and "Unload Data" features for quick demonstrations without needing a live store.</li>
+<li><b>Secure Authentication:</b> A robust JWT-based authentication system for tenant signup and login.</li>
+<li><b>Interactive Dashboard:</b> A dynamic frontend built with React that displays key metrics, charts, and data tables.</li>
+</ul>
+
+<br>
+
+<h2>🏗️ Architecture</h2>
+
+The application follows a modern three-tier architecture, with separate, decoupled services for the database, backend, and frontend.
+
+<h3>Architecture Diagram</h3>
+
+graph TD
+    subgraph "User's Browser"
+        A[React Frontend on Render]
+    end
+
+    subgraph "Backend Infrastructure"
+        B(Node.js/Express Backend on Render) -- "Reads/Writes Data (SQL)" --> C(MySQL Database on Railway);
+    end
+
+    subgraph "External Services"
+        D[Shopify Admin API]
+    end
+
+    A -- "Makes API Calls (HTTPS/REST)" --> B;
+    B -- "Fetches Live Data" --> D;
+
+<ul>
+<li><b>Frontend (React):</b> A single-page application deployed as a Static Site on Render. It handles all user interaction and visualization.</li>
+<li><b>Backend (Node.js/Express):</b> A RESTful API server deployed as a Web Service on Render. It manages business logic, database interactions, and communication with the Shopify API.</li>
+<li><b>Database (MySQL):</b> A relational database hosted on Railway, managed by the Sequelize ORM.</li>
+</ul>
+
+<br>
+
+<h2>🛠️ Setup and Installation (Local)</h2>
+
+To run this project on your local machine, follow these steps.
+
+<h3>Prerequisites</h3>
+<ul>
+<li>Node.js (v18 or later)</li>
+<li>A local MySQL server installed and running.</li>
+</ul>
+
+<h3>1. Clone the Repository</h3>
+<pre><code>git clone &lt;your-repo-url&gt;
+cd &lt;your-repo-folder&gt;</code></pre>
+
+<h3>2. Backend Setup</h3>
+<ol>
+<li>Navigate to the backend folder:
+<pre><code>cd backend</code></pre>
+</li>
+<li>Create a <code>.env</code> file by copying the example:
+<pre><code>cp .env.example .env</code></pre>
+</li>
+<li>Open the new <code>.env</code> file and fill in your local database credentials (<code>DB_NAME</code>, <code>DB_USER</code>, <code>DB_PASSWORD</code>), a secret for <code>JWT_SECRET</code>, and your Shopify store details.</li>
+<li>Install dependencies and start the server:
+<pre><code>npm install
+npm run dev</code></pre>
+The backend server will start on <code>http://localhost:4000</code>.
+</li>
+</ol>
+
+<h3>3. Frontend Setup</h3>
+<ol>
+<li>Open a new terminal and navigate to the frontend folder:
+<pre><code>cd frontend</code></pre>
+</li>
+<li>Create a <code>.env</code> file for the frontend:
+<pre><code>echo "REACT_APP_API_URL=http://localhost:4000/api" > .env</code></pre>
+</li>
+<li>Install dependencies and start the application:
+<pre><code>npm install
+npm start</code></pre>
+The frontend will open in your browser at <code>http://localhost:3000</code>. You can now sign up, log in, and use the application.
+</li>
+</ol>
+
+<br>
+
+<h2>📄 API Endpoints and DB Schema</h2>
+
+<h3>API Endpoints</h3>
+All routes are prefixed with <code>/api</code>. Routes marked with <code>(Protected)</code> require a valid JWT.
+
+
+GET| Method   | Endpoint                                  | Description                                       |
+| :------- | :---------------------------------------- | :------------------------------------------------ |
+| `POST`   | `/auth/signup`                            | Create a new tenant account.                      |
+| `POST`   | `/auth/login`                             | Log in and receive a JWT.                         |
+| `POST`   | `/ingest/products` `(Protected)`          | Ingest sample products.                           |
+| `POST`   | `/ingest/customers` `(Protected)`         | Ingest sample customers.                          |
+| `POST`   | `/ingest/orders` `(Protected)`            | Ingest sample orders.                             |
+| `DELETE` | `/ingest/tenant/all-data` `(Protected)`   | Clear all data for the tenant.                    |
+| `GET`    | `/shopify/sync/products` `(Protected)`    | Sync products from a live Shopify store.          |
+| `GET`    | `/shopify/sync/customers` `(Protected)`   | Sync customers from Shopify.                      |
+| `GET`    | `/shopify/sync/orders` `(Protected)`      | Sync orders from Shopify.                         |
+| `GET`    | `/dashboard/overview` `(Protected)`       | Get high-level metrics for the dashboard.         |
+| `GET`    | `/dashboard/sales-trend` `(Protected)`    | Get data for the sales trend chart.               |
+
+<h3>Database Schema</h3>
+The database uses a multi-tenant model where data is isolated by a <code>tenantId</code>.
+
+<ul>
+<li><b>Tenant:</b> Stores information about each registered store, including their name, URL, and credentials.</li>
+<li><b>Customer:</b> Stores customer information. A composite unique key on <code>(tenantId, shopifyId)</code> ensures customer IDs are unique per store.</li>
+<li><b>Product:</b> Stores product information, with a composite unique key on <code>(tenantId, shopifyId)</code>.</li>
+<li><b>Order:</b> Stores order information, with a composite unique key on <code>(tenantId, shopifyId)</code>.</li>
+<li><b>OrderItem:</b> A join table that links products to orders in a many-to-many relationship.</li>
+<li><b>Event:</b> Stores custom events (e.g., "Checkout Started") and events synced from Shopify.</li>
+</ul>
+
+<br>
+
+<h2>⚖️ Known Limitations & Assumptions</h2>
+
+<ul>
+<li><b>Shopify Credentials:</b> For this demo, the Shopify Access Token is stored directly in the database. In a production environment, this sensitive data <b>must</b> be encrypted at rest.</li>
+<li><b>Real-time Sync:</b> The current implementation relies on manual "Sync" buttons. A production system would use Shopify Webhooks to receive data in real-time.</li>
+<li><b>Data Volume:</b> The current sync process fetches all data at once. A production solution would need to implement pagination to handle large stores with thousands of records.</li>
+<li><b>Error Handling:</b> The UI provides general error messages. A production app would have more specific feedback for different types of failures (e.g., invalid API key vs. network error).</li>
+</ul>
