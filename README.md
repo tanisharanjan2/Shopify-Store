@@ -28,19 +28,20 @@ The application follows a modern three-tier architecture, with separate, decoupl
 graph TD
 
 subgraph "User's Browser"
-    A[React Frontend on Render]
+    A["React Frontend on Render"]
 end
 
 subgraph "Backend Infrastructure"
-    B[Node.js/Express Backend on Render] -->|Reads/Writes Data (SQL)| C[(MySQL_Database_on_Railway)]
+    B["Node.js/Express Backend on Render"] -->|Reads/Writes Data (SQL)| C[("MySQL Database on Railway")]
 end
 
 subgraph "External Services"
-    D[Shopify Admin API]
+    D["Shopify Admin API"]
 end
 
 A -->|Makes API Calls (HTTPS/REST)| B
 B -->|Fetches Live Data| D
+
 
 
 <ul>
