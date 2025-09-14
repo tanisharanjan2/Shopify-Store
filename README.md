@@ -101,19 +101,25 @@ The frontend will open in your browser at <code>http://localhost:3000</code>. Yo
 All routes are prefixed with <code>/api</code>. Routes marked with <code>(Protected)</code> require a valid JWT.
 
 
-GET| Method   | Endpoint                                  | Description                                       |
-| :------- | :---------------------------------------- | :------------------------------------------------ |
-| `POST`   | `/auth/signup`                            | Create a new tenant account.                      |
-| `POST`   | `/auth/login`                             | Log in and receive a JWT.                         |
-| `POST`   | `/ingest/products` `(Protected)`          | Ingest sample products.                           |
-| `POST`   | `/ingest/customers` `(Protected)`         | Ingest sample customers.                          |
-| `POST`   | `/ingest/orders` `(Protected)`            | Ingest sample orders.                             |
-| `DELETE` | `/ingest/tenant/all-data` `(Protected)`   | Clear all data for the tenant.                    |
-| `GET`    | `/shopify/sync/products` `(Protected)`    | Sync products from a live Shopify store.          |
-| `GET`    | `/shopify/sync/customers` `(Protected)`   | Sync customers from Shopify.                      |
-| `GET`    | `/shopify/sync/orders` `(Protected)`      | Sync orders from Shopify.                         |
-| `GET`    | `/dashboard/overview` `(Protected)`       | Get high-level metrics for the dashboard.         |
-| `GET`    | `/dashboard/sales-trend` `(Protected)`    | Get data for the sales trend chart.               |
+| Method   | Endpoint                                   | Description                                       |
+|--------- |------------------------------------------- |-------------------------------------------------- |
+| `POST`   | `/auth/signup`                             | Create a new tenant account.                      |
+| `POST`   | `/auth/login`                              | Log in and receive a JWT.                         |
+| `POST`   | `/ingest/products` **(Protected)**         | Ingest sample products.                           |
+| `POST`   | `/ingest/customers` **(Protected)**        | Ingest sample customers.                          |
+| `POST`   | `/ingest/orders` **(Protected)**           | Ingest sample orders.                             |
+| `POST`   | `/ingest/events` **(Protected)**           | Ingest sample custom events.                      |
+| `DELETE` | `/ingest/tenant/all-data` **(Protected)**  | Clear all data for the tenant.                    |
+| `GET`    | `/shopify/sync/products` **(Protected)**   | Sync products from a live Shopify store.          |
+| `GET`    | `/shopify/sync/customers` **(Protected)**  | Sync customers from Shopify.                      |
+| `GET`    | `/shopify/sync/orders` **(Protected)**     | Sync orders from Shopify.                         |
+| `GET`    | `/shopify/sync/customer-events` **(Protected)** | Sync customer events from Shopify.                |
+| `GET`    | `/dashboard/overview` **(Protected)**      | Get high-level metrics for the dashboard.         |
+| `GET`    | `/dashboard/tenant-info` **(Protected)**   | Get the current tenant's name, email, and logo.   |
+| `GET`    | `/dashboard/events-summary` **(Protected)**| Get a summary of custom event counts.             |
+| `GET`    | `/dashboard/sales-trend` **(Protected)**   | Get data for the sales trend chart.               |
+| `GET`    | `/dashboard/top-customers-chart` **(Protected)** | Get data for the top customers chart.             |
+| `GET`    | `/dashboard/customer-history` **(Protected)** | Get a detailed history for all customers.         |
 
 <h3>Database Schema</h3>
 The database uses a multi-tenant model where data is isolated by a <code>tenantId</code>.
