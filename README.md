@@ -167,10 +167,9 @@ The database uses a multi-tenant model where data is isolated by a <code>tenantI
 <li><b>OrderItem:</b> A join table that links products to orders in a many-to-many relationship.</li>
 <li><b>Event:</b> Stores custom events (e.g., "Checkout Started") and events synced from Shopify.</li>
 </ul>
-
 <br>
+
 ```mermaid
-erDiagram
     Tenant {
         int id PK
         string name
@@ -232,6 +231,7 @@ erDiagram
     Customer ||--|{ Event : triggers
     Order ||--o{ OrderItem : contains
     Product ||--o{ OrderItem : "part of"
+
 <br>
 <h2>⚖️ Known Limitations & Assumptions</h2>
 
