@@ -130,7 +130,7 @@ This project is deployed using Render for the frontend/backend and Railway for t
 
 <h3>5. Credentials of 2 shopify stores</h3>
 <ol>
-<li>1) Gmail-katrinakaif@gmail.com | password- katrinakaif</li>
+<li>1) <code></code>Gmail-katrinakaif@gmail.com | password- katrinakaif </li>code> </li>
 <li>2) <code> Gmail - tanisha@gmail.com | password- tanisha </code> </li>
 
 </ol>
