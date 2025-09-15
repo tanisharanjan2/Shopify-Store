@@ -25,7 +25,7 @@ The application follows a modern three-tier architecture, with separate, decoupl
 <h3>Architecture Diagram</h3>
 
 
-![Alt text](Architecture.png)
+![Alt text](../Architecture.png)
 
 
 
